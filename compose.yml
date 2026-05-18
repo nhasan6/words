@@ -1,0 +1,42 @@
+# services --> lists containers you want to run together 
+services:
+  # container called app
+  app:
+    build: .
+    ports:
+      # your machine : container
+      - "8000:8000"
+    depends_on:
+      - db
+    develop:
+      watch:
+        # syncs local file changes into the container automatically
+        - action : sync
+          # specify where the changes will be made
+          path: .
+          # where the changes need to be synced
+          target: /app
+          ignore:
+            - .venv/
+
+        # rebuilds the image when dependencies change
+        - action : rebuild
+          path: pyproject.toml
+
+  # container called db
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+
+    volumes:
+      # path where data is stored inside the container by Postgres
+      - db_data:/var/lib/postgresql
+    
+volumes:
+  db_data:
+

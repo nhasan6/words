@@ -16,6 +16,6 @@ engine = create_async_engine(url=DB_URL, echo=True)
 async def init_db():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-        print("Database initialized and tables created if they did not exist.")
+        print("Database initialized and tables created if they did not exist")
         
         

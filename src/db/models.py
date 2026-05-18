@@ -1,5 +1,5 @@
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-
+from datetime import datetime
 # base class that all models will inherit from
 class Base(DeclarativeBase):
     pass
@@ -10,7 +10,7 @@ class User(Base):
     username: Mapped[str] = mapped_column(unique=True, nullable=False)
     email: Mapped[str] = mapped_column(unique=True, nullable=False)
     hashed_password: Mapped[str] = mapped_column(nullable=False)
-    created_at: Mapped[str] = mapped_column(nullable=False)
+    created_at: Mapped[datetime] = mapped_column(nullable=False)
 
     # helper func that makes obj print nicely
     def __repr__(self):

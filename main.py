@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from src.db.connection import init_db
 from contextlib import asynccontextmanager
+from src.routes.auth import router as auth_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -13,7 +14,7 @@ async def lifespan(app: FastAPI):
     print ("server is stopping ....")
 
 app = FastAPI(lifespan=lifespan)
-
+app.include_router(auth_router)
 
 @app.get("/")
 async def root():

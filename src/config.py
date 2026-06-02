@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
     POSTGRES_DB: str
+    SECRET_JWT_KEY: str
 
     model_config = SettingsConfigDict(
         env_file = ".env",

@@ -4,7 +4,8 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKey, func, Enum as SAEnum, String
 from sqlalchemy.dialects.postgresql import ARRAY
 from datetime import datetime
-from src.db.models import Base, Source
+from src.db.models.base import Base
+from src.db.models.source import Source
 
 class WordType(PyEnum):
     noun = "noun"

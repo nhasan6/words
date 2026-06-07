@@ -4,8 +4,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import Enum as SAEnum, String
 from sqlalchemy.dialects.postgresql import ARRAY
 from datetime import date
-from src.db.models import Base, Word
-
+from src.db.models.base import Base
 
 class SourceType(PyEnum):
     book = "book"
@@ -17,7 +16,7 @@ class SourceType(PyEnum):
 class Source(Base):
     __tablename__ = "sources"
     __mapper_args__ = {
-        "polymorphic_on": type,
+        "polymorphic_on": "type",
         "polymorphic_identity": "source",
     }
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
@@ -26,7 +25,6 @@ class Source(Base):
     quote: Mapped[Optional[str]] = mapped_column()
     genre: Mapped[Optional[List[str]]] = mapped_column(ARRAY(String))
     release_date: Mapped[date] = mapped_column(nullable=False)
-    words: Mapped[List["Word"]] = relationship(back_populates="source")
 
     # helper func that makes obj print nicely
     def __repr__(self):

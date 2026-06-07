@@ -28,8 +28,8 @@ class Word(Base):
     # Database level: foreign key column pointing to sources.id
     source_id: Mapped[Optional[int]] = mapped_column(ForeignKey("sources.id"))
 
-    # SQLAlchemy relationship: links to the Source model ("back_populates" syncs changes on both sides in Python memory)
-    source: Mapped[Optional["Source"]] = relationship(back_populates="words")
+    # SQLAlchemy relationship: links to the Source model ()
+    source: Mapped[Optional["Source"]] = relationship()
 
     # helper func that makes obj print nicely
     def __repr__(self):

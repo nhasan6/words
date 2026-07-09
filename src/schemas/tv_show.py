@@ -1,6 +1,5 @@
 from pydantic import BaseModel
 from src.schemas.source import SourceBase, SourceResponse, SourceUpdate
-from typing import Optional
 
 class TvShowBase(SourceBase):
     franchise: str | None = None 

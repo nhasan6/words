@@ -1,5 +1,4 @@
 from src.schemas.source import SourceBase, SourceResponse, SourceUpdate
-from typing import Optional
 
 class BookBase(SourceBase):
     franchise: str | None = None 

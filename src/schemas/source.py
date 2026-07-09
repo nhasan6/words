@@ -1,8 +1,6 @@
-from typing import Optional
 from datetime import date
 from pydantic import BaseModel
 from src.db.models.source import SourceType
-from src.schemas.word import WordResponse
 
 class SourceBase(BaseModel):
     title: str

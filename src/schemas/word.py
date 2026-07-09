@@ -7,17 +7,25 @@ from src.schemas.source import SourceResponse
 
 class WordBase(BaseModel):
     text: str
-    type: Optional[WordType]
-    etymology: Optional[str]
-    tags: Optional[list[str]]
+    type: WordType | None = None
+    etymology: str | None = None
+    tags: list[str] | None = None
 
 class WordCreate(WordBase):
-    source_id: Optional[int]
+    source_id: int | None = None
+
+class WordUpdate(BaseModel):
+    text: str | None = None
+    type: WordType | None = None
+    etymology: str | None = None
+    tags: list[str] | None = None
+    source_id: int | None = None
 
 class WordResponse(WordBase):
     id: int
     date_added: datetime
-    source: Optional[SourceResponse]
-    class Config: from_attributes = True
-
+    source: SourceResponse | None = None
+    model_config = {
+        "from_attributes": True
+    }
 

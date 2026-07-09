@@ -7,12 +7,19 @@ from src.schemas.word import WordResponse
 class SourceBase(BaseModel):
     title: str
     type: SourceType
-    quote: Optional[str]
-    genre: Optional[list[str]]
+    quote: str | None = None 
+    genre: list[str] | None = None 
     release_date: date
 
 class SourceResponse(SourceBase):
     id: int
-    class Config: from_attributes = True
+    model_config = {
+        "from_attributes": True
+    }
 
-
+class SourceUpdate(BaseModel):
+    title: str | None = None 
+    type: SourceType | None = None 
+    quote: str | None = None 
+    genre: list[str] | None = None 
+    release_date: date | None = None 

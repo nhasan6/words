@@ -1,13 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 from src.auth.dependencies import get_current_user
 from src.db.connection import get_db
 from sqlalchemy import select
 
-from src.db.models.book import Book
-from src.db.models.movie import Movie
-from src.db.models.source import Source, SourceType
-from src.db.models.tv_show import TvShow
+from src.db.models.source import Source
 from src.filters.filters import apply_filters
 from src.schemas.filter import WordFilter
 from src.schemas.word import WordCreate, WordResponse, WordUpdate
@@ -17,7 +15,7 @@ router = APIRouter(prefix="/words")
 
 @router.get("/", response_model=list[WordResponse])
 async def get_words(filters: WordFilter = Depends(), db: AsyncSession = Depends(get_db)) -> list[WordResponse]:
-    stmt = select(Word).join(Source)
+    stmt = select(Word).outerjoin(Source)
     stmt = apply_filters(stmt, filters)
     result = await db.execute(stmt)
     return result.scalars().all()
@@ -33,8 +31,11 @@ async def get_word(id: int, db: AsyncSession = Depends(get_db)) -> WordResponse:
         )
     return result
 
-@router.post("/", response_model=WordResponse)
-async def add_word(word: WordCreate, db: AsyncSession = Depends(get_db), current_user = Depends(get_current_user)) -> WordResponse:
+@router.post("/", response_model=WordResponse, status_code=status.HTTP_201_CREATED,
+             responses={ 
+                 401: {"description": "Not authenticated"},
+                 500: {"description": "Database error"}} )
+async def add_word(word: WordCreate, db: AsyncSession = Depends(get_db), _current_user = Depends(get_current_user)) -> WordResponse:
     if word.source_id:
         source = await db.get(Source, word.source_id)
         if source is None:
@@ -54,15 +55,19 @@ async def add_word(word: WordCreate, db: AsyncSession = Depends(get_db), current
         await db.commit()
         await db.refresh(new_word)
         return new_word
-    except Exception:
+    except SQLAlchemyError:
         await db.rollback() # undoes any partial changes
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="An error occured"
+            detail="Database error"
         )
     
-@router.put("/{id}", response_model=WordResponse)
-async def update_word(id: int, word: WordUpdate, db: AsyncSession = Depends(get_db), current_user = Depends(get_current_user)) -> WordResponse:
+@router.put("/{id}", response_model=WordResponse, 
+            responses={
+                401: {"description": "Not authenticated"},
+                404: {"description": "Word or Source not found"},
+                500: {"description": "Database error"} })
+async def update_word(id: int, word: WordUpdate, db: AsyncSession = Depends(get_db), _current_user = Depends(get_current_user)) -> WordResponse:
     db_word = await db.get(Word, id)
     if db_word is None:
         raise HTTPException(
@@ -70,7 +75,9 @@ async def update_word(id: int, word: WordUpdate, db: AsyncSession = Depends(get_
             detail="Word not found"
         )
     
-    if word.source_id:
+    update_data = word.model_dump(exclude_unset=True)
+
+    if "source_id" in update_data and update_data["source_id"] is not None:
         source = await db.get(Source, word.source_id)
         if source is None:
             raise HTTPException(
@@ -78,12 +85,30 @@ async def update_word(id: int, word: WordUpdate, db: AsyncSession = Depends(get_
                 detail="Source not found"  # source doesn't exist (needs to be created first)
             )
 
-    update_data = word.model_dump(exclude_unset=True)
+    try: 
 
-    for key, value in update_data.items():
-        setattr(db_word, key, value)
+        for key, value in update_data.items():
+            setattr(db_word, key, value)
 
+        await db.commit()
+        await db.refresh(db_word)
+        return db_word
+    
+    except SQLAlchemyError:
+        await db.rollback() # undoes any partial changes
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Database Error"
+        )
+
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_word(id: int, db: AsyncSession = Depends(get_db), _current_user = Depends(get_current_user)) ->WordResponse:
+    db_word = await db.get(Word, id)
+    if db_word is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, 
+            detail="Word not found"
+        )
+    
+    await db.delete(db_word)
     await db.commit()
-    await db.referesh(db_word)
-
-    return db_word

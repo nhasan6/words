@@ -7,7 +7,7 @@ class SourceBase(BaseModel):
     type: SourceType
     quote: str | None = None 
     genre: list[str] | None = None 
-    release_date: date
+    release_date: date | None = None 
 
 class SourceResponse(SourceBase):
     id: int

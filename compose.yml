@@ -22,6 +22,8 @@ services:
         # rebuilds the image when dependencies change
         - action : rebuild
           path: pyproject.toml
+    volumes:
+    - ./alembic/versions:/app/alembic/versions
 
   # container called db
   db:

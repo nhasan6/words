@@ -8,7 +8,7 @@ class WordBase(BaseModel):
     type: WordType | None = None
     definition: str | None = None
     tags: list[str] | None = None
-    quote: str |None = None 
+    quote: str | None = None 
 
 class WordCreate(WordBase):
     source_id: int | None = None
@@ -19,6 +19,8 @@ class WordUpdate(BaseModel):
     definition: str | None = None
     tags: list[str] | None = None
     source_id: int | None = None
+    quote: str | None = None 
+
 
 class WordResponse(WordBase):
     id: int

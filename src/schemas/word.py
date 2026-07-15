@@ -9,8 +9,9 @@ class WordBase(BaseModel):
     definition: str | None = None
     tags: list[str] | None = None
     quote: str | None = None 
+    speaker: str | None = None 
 
-class WordCreate(WordBase):
+class WordCreate(WordBase): 
     source_id: int | None = None
 
 class WordUpdate(BaseModel):
@@ -20,12 +21,15 @@ class WordUpdate(BaseModel):
     tags: list[str] | None = None
     source_id: int | None = None
     quote: str | None = None 
+    speaker: str | None = None 
 
 
 class WordResponse(WordBase):
     id: int
     date_added: datetime
     source: SourceResponse | None = None
+    quote: str | None = None 
+    speaker: str | None = None 
     model_config = {
         "from_attributes": True
     }

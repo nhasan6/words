@@ -17,8 +17,9 @@ engine = create_async_engine(url=DB_URL, echo=True)
 AsyncSessionLocal = async_sessionmaker(engine, expire_on_commit=False)
 
 async def init_db():
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+    # let alembic handle the creation of the tables
+    # async with engine.begin() as conn:
+    #     await conn.run_sync(Base.metadata.create_all)
         print("Database initialized and tables created if they did not exist")
         
 async def get_db():

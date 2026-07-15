@@ -6,8 +6,7 @@ class TvShowBase(SourceBase):
     season_number: int | None = None
     director: str | None = None
     screenwriter: str | None = None 
-    actor: str | None = None 
-    character: str | None = None # documentaries only have an actor (default to actor over character)
+    cast: list[str] | None = None
 
 class TvShowCreate(TvShowBase):
     pass
@@ -20,5 +19,4 @@ class TvShowUpdate(SourceUpdate):
     season_number: int | None = None 
     director: str | None = None 
     screenwriter: str | None = None 
-    actor: str | None = None 
-    character: str | None = None 
+    cast: list[str] | None = None

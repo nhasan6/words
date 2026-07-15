@@ -1,4 +1,4 @@
-from sqlalchemy import Select
+from sqlalchemy import Select, func
 
 from src.db.models.book import Book
 from src.db.models.movie import Movie
@@ -11,6 +11,8 @@ from src.schemas.filter import WordFilter
 def apply_word_filters(stmt: Select, filters: WordFilter):
     if filters.word_type:
         stmt = stmt.where(Word.type == filters.word_type)
+    if filters.speaker:
+        stmt = stmt.where(Word.speaker.ilike(f"%{filters.speaker}%"))
     return stmt
 
 def apply_source_filters(stmt, filters: WordFilter):
@@ -23,43 +25,44 @@ def apply_source_filters(stmt, filters: WordFilter):
     if filters.released_before:
         stmt = stmt.where(Source.release_date <= filters.released_before)
     if filters.genre:
-        stmt = stmt.where(Source.genre.contains(filters.genre))
+        stmt = stmt.where(
+            func.lower(func.array_to_string(Source.genre, ", ")).like(
+                f"%{filters.genre.lower()}%"
+            )
+        )
     return stmt
 
 def apply_book_filters(stmt, filters: WordFilter):
-    if filters.auhor or filters.character: # don't join if just title
+    if filters.author: # don't join if just title
         stmt = stmt.join(Book)
-
-        if filters.author:
-            stmt = stmt.where(Book.author.ilike(f"%{filters.author}%"))
-        if filters.character:
-            stmt = stmt.where(Book.character.ilike(f"%{filters.character}%"))
-        
+        stmt = stmt.where(Book.author.ilike(f"%{filters.author}%"))
     return stmt
 
 def apply_tv_filters(stmt, filters: WordFilter):
-    if filters.director or filters.actor or filters.character: 
+    if filters.director or filters.cast_member: 
         stmt = stmt.join(TvShow)
         if filters.director:
             stmt = stmt.where(TvShow.director.ilike(f"%{filters.director}%"))
-        if filters.actor:
-            stmt = stmt.where(TvShow.actor.ilike(f"%{filters.actor}%"))
-        if filters.character:
-            stmt = stmt.where(TvShow.character == filters.character)
-
+        if filters.cast_member:
+            stmt = stmt.where(
+                func.lower(func.array_to_string(TvShow.cast, ", ")).like(
+                    f"%{filters.cast_member.lower()}%"
+                )
+            )
     return stmt
 
 def apply_movie_filters(stmt, filters: WordFilter):
-    if filters.director or filters.actor or filters.character: 
+    if filters.director or filters.cast_member: 
         stmt = stmt.join(Movie)
 
         if filters.director:
             stmt = stmt.where(Movie.director.ilike(f"%{filters.director}%"))
-        if filters.actor:
-            stmt = stmt.where(Movie.actor.ilike(f"%{filters.actor}%"))
-        if filters.character:
-            stmt = stmt.where(Movie.character == filters.character)
-        
+        if filters.cast_member:
+            stmt = stmt.where(
+                func.lower(func.array_to_string(TvShow.cast, ", ")).like(
+                    f"%{filters.cast_member.lower()}%"
+                )
+            )
     return stmt
         
 def apply_filters(stmt, filters):

@@ -21,6 +21,7 @@ class Word(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     text: Mapped[str] = mapped_column(unique=True, nullable=False)
     quote: Mapped[Optional[str]] = mapped_column()
+    speaker: Mapped[Optional[str]] = mapped_column()
     type: Mapped[Optional[WordType]] = mapped_column(SAEnum(WordType)) # want to limit to enums
     definition: Mapped[Optional[str]] = mapped_column() 
     date_added: Mapped[datetime] = mapped_column(server_default=func.now())

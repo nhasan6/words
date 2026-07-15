@@ -46,7 +46,6 @@ async def add_book(book: BookCreate, db: AsyncSession = Depends(get_db), _curren
 
         franchise = book.franchise,
         author = book.author,
-        character = book.character
     )
     try:
         db.add(new_book)
@@ -74,8 +73,7 @@ async def add_movie(movie: MovieCreate, db: AsyncSession = Depends(get_db), _cur
         franchise = movie.franchise,
         director = movie.director,
         screenwriter = movie.screenwriter,
-        actor = movie.actor,
-        character = movie.character
+        cast = movie.cast,
     )
 
     try:
@@ -106,8 +104,7 @@ async def add_tv_show(tv_show: TvShowCreate, db: AsyncSession = Depends(get_db),
         episode_number = tv_show.episode_number,
         season_number = tv_show.season_number,
         screenwriter = tv_show.screenwriter,
-        actor = tv_show.actor,
-        character = tv_show.character
+        cast = tv_show.cast,
     )
 
     try:

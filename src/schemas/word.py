@@ -6,7 +6,7 @@ from src.schemas.source import SourceResponse
 class WordBase(BaseModel):
     text: str
     type: WordType | None = None
-    etymology: str | None = None
+    definition: str | None = None
     tags: list[str] | None = None
 
 class WordCreate(WordBase):
@@ -15,7 +15,7 @@ class WordCreate(WordBase):
 class WordUpdate(BaseModel):
     text: str | None = None
     type: WordType | None = None
-    etymology: str | None = None
+    definition: str | None = None
     tags: list[str] | None = None
     source_id: int | None = None
 

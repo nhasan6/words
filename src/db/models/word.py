@@ -21,7 +21,7 @@ class Word(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     text: Mapped[str] = mapped_column(unique=True, nullable=False)
     type: Mapped[Optional[WordType]] = mapped_column(SAEnum(WordType)) # want to limit to enums
-    etymology: Mapped[Optional[str]] = mapped_column() 
+    definition: Mapped[Optional[str]] = mapped_column() 
     date_added: Mapped[datetime] = mapped_column(server_default=func.now())
     tags: Mapped[Optional[List[str]]] = mapped_column(ARRAY(String))
 
@@ -33,4 +33,4 @@ class Word(Base):
 
     # helper func that makes obj print nicely
     def __repr__(self):
-        return f"<Word(id={self.id}, text={self.text}, type={self.type}, etymology={self.etymology}, date_added={self.date_added}, tags={self.tags})>"
+        return f"<Word(id={self.id}, text={self.text}, type={self.type}, definition={self.definition}, date_added={self.date_added}, tags={self.tags})>"

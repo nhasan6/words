@@ -10,7 +10,6 @@ class TvShow(Source):
     }
     # Database level: foreign key column pointing to sources.id
     id: Mapped[int] = mapped_column(ForeignKey("sources.id"), primary_key=True)
-    franchise: Mapped[Optional[str]] = mapped_column()
     episode_number: Mapped[int] = mapped_column()
     season_number: Mapped[int] = mapped_column()
     director: Mapped[Optional[str]] = mapped_column()

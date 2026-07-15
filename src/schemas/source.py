@@ -4,6 +4,7 @@ from src.db.models.source import SourceType
 
 class SourceBase(BaseModel):
     title: str
+    franchise: str | None = None 
     type: SourceType
     quote: str | None = None 
     genre: list[str] | None = None 
@@ -17,6 +18,7 @@ class SourceResponse(SourceBase):
 
 class SourceUpdate(BaseModel):
     title: str | None = None 
+    franchise: str | None = None 
     type: SourceType | None = None 
     quote: str | None = None 
     genre: list[str] | None = None 

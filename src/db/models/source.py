@@ -21,6 +21,7 @@ class Source(Base):
     }
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     title: Mapped[str] = mapped_column(nullable=False)
+    franchise: Mapped[Optional[str]] = mapped_column()
     type: Mapped[SourceType] = mapped_column(SAEnum(SourceType)) # want to limit to enums
     quote: Mapped[Optional[str]] = mapped_column()
     genre: Mapped[Optional[List[str]]] = mapped_column(ARRAY(String))

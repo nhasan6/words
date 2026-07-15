@@ -10,7 +10,6 @@ class Book(Source):
     }
     # Database level: foreign key column pointing to sources.id
     id: Mapped[int] = mapped_column(ForeignKey("sources.id"), primary_key=True)
-    franchise: Mapped[Optional[str]] = mapped_column()
     author: Mapped[str] = mapped_column()
     character: Mapped[Optional[str]] = mapped_column() # not every quote has a named character
 

@@ -10,7 +10,6 @@ class Movie(Source):
     }
      # Database level: foreign key column pointing to sources.id
     id: Mapped[int] = mapped_column(ForeignKey("sources.id"), primary_key=True)
-    franchise: Mapped[Optional[str]] = mapped_column()
     director: Mapped[str] = mapped_column()
     screenwriter: Mapped[Optional[str]] = mapped_column()
     actor: Mapped[str] = mapped_column()

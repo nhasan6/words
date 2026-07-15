@@ -10,6 +10,7 @@ class WordFilter(BaseModel):
     source_type: SourceType | None = None
 
     title: str | None = None
+    franchise: str | None = None
     genre: str | None = None
     released_after: date | None = None
     released_before: date | None = None

@@ -2,7 +2,6 @@ from pydantic import BaseModel
 from src.schemas.source import SourceBase, SourceResponse, SourceUpdate
 
 class TvShowBase(SourceBase):
-    franchise: str | None = None 
     episode_number: int | None = None
     season_number: int | None = None
     director: str | None = None
@@ -17,7 +16,6 @@ class TvShowResponse(TvShowBase, SourceResponse):
     pass
 
 class TvShowUpdate(SourceUpdate):
-    franchise: str | None = None 
     episode_number: int | None = None 
     season_number: int | None = None 
     director: str | None = None 

@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 from src.auth.dependencies import get_current_user
 from src.db.connection import get_db
 from sqlalchemy import select
@@ -15,14 +16,15 @@ router = APIRouter(prefix="/words")
 
 @router.get("/", response_model=list[WordResponse])
 async def get_words(filters: WordFilter = Depends(), db: AsyncSession = Depends(get_db)) -> list[WordResponse]:
-    stmt = select(Word).outerjoin(Source)
+    stmt = select(Word).options(selectinload(Word.source)).outerjoin(Source)
     stmt = apply_filters(stmt, filters)
     result = await db.execute(stmt)
     return result.scalars().all()
 
 @router.get("/{id}", response_model=WordResponse)
 async def get_word(id: int, db: AsyncSession = Depends(get_db)) -> WordResponse:
-    result = await db.get(Word, id)
+    result = await db.execute(select(Word).options(selectinload(Word.source)).where(Word.id == id))
+    result = result.scalar_one_or_none()
 
     if result is None:
         raise HTTPException(
@@ -54,6 +56,11 @@ async def add_word(word: WordCreate, db: AsyncSession = Depends(get_db), _curren
         db.add(new_word)
         await db.commit()
         await db.refresh(new_word)
+
+        if word.source_id:
+            # loads the src relationship
+            result = await db.execute(select(Word).options(selectinload(Word.source)).where(Word.id == new_word.id))
+            return result.scalar_one()
         return new_word
     except SQLAlchemyError:
         await db.rollback() # undoes any partial changes
@@ -92,7 +99,10 @@ async def update_word(id: int, word: WordUpdate, db: AsyncSession = Depends(get_
 
         await db.commit()
         await db.refresh(db_word)
-        return db_word
+        
+        # loads the src relationship
+        result = await db.execute(select(Word).options(selectinload(Word.source)).where(Word.id == db_word.id))
+        return result.scalar_one()
     
     except SQLAlchemyError:
         await db.rollback() # undoes any partial changes

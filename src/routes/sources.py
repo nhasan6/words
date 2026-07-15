@@ -19,7 +19,7 @@ router = APIRouter(prefix="/sources")
 
 @router.get("/", response_model=list[SourceResponse])
 async def get_sources(db: AsyncSession = Depends(get_db)) -> list[SourceResponse]:
-    result = await db.execute(select(Source))
+    result = await db.execute(select(Source).execution_options(populate_existing=True))
     return result.scalars().all()
 
 @router.get("/{id}", response_model=SourceResponse,

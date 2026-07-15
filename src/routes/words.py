@@ -102,7 +102,7 @@ async def update_word(id: int, word: WordUpdate, db: AsyncSession = Depends(get_
         )
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_word(id: int, db: AsyncSession = Depends(get_db), _current_user = Depends(get_current_user)) ->WordResponse:
+async def delete_word(id: int, db: AsyncSession = Depends(get_db), _current_user = Depends(get_current_user)):
     db_word = await db.get(Word, id)
     if db_word is None:
         raise HTTPException(

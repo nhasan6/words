@@ -8,6 +8,7 @@ class WordBase(BaseModel):
     type: WordType | None = None
     definition: str | None = None
     tags: list[str] | None = None
+    quote: str |None = None 
 
 class WordCreate(WordBase):
     source_id: int | None = None

@@ -49,6 +49,7 @@ async def add_word(word: WordCreate, db: AsyncSession = Depends(get_db), _curren
         text = word.text,
         type = word.type,
         definition = word.definition,
+        quote = word.quote,
         tags = word.tags,
         source_id = word.source_id
     )

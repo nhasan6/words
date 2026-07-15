@@ -41,7 +41,6 @@ async def add_book(book: BookCreate, db: AsyncSession = Depends(get_db), _curren
     new_book = Book(
         title = book.title,
         type = SourceType.book,
-        quote = book.quote,
         genre = book.genre,
         release_date = book.release_date,
 
@@ -69,7 +68,6 @@ async def add_movie(movie: MovieCreate, db: AsyncSession = Depends(get_db), _cur
     new_movie = Movie(
         title = movie.title,
         type = SourceType.movie,
-        quote = movie.quote,
         genre = movie.genre,
         release_date = movie.release_date,
 
@@ -100,7 +98,6 @@ async def add_tv_show(tv_show: TvShowCreate, db: AsyncSession = Depends(get_db),
     new_tv_show = TvShow(
         title = tv_show.title,
         type = SourceType.tv_show,
-        quote = tv_show.quote,
         genre = tv_show.genre,
         release_date = tv_show.release_date,
 

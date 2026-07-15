@@ -6,7 +6,6 @@ class SourceBase(BaseModel):
     title: str
     franchise: str | None = None 
     type: SourceType
-    quote: str | None = None 
     genre: list[str] | None = None 
     release_date: date | None = None 
 
@@ -20,6 +19,5 @@ class SourceUpdate(BaseModel):
     title: str | None = None 
     franchise: str | None = None 
     type: SourceType | None = None 
-    quote: str | None = None 
     genre: list[str] | None = None 
     release_date: date | None = None 

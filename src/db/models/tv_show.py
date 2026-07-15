@@ -13,10 +13,10 @@ class TvShow(Source):
     franchise: Mapped[Optional[str]] = mapped_column()
     episode_number: Mapped[int] = mapped_column()
     season_number: Mapped[int] = mapped_column()
-    director: Mapped[str] = mapped_column()
+    director: Mapped[Optional[str]] = mapped_column()
     screenwriter: Mapped[Optional[str]] = mapped_column()
     actor: Mapped[str] = mapped_column()
-    character: Mapped[str] = mapped_column()
+    character: Mapped[Optional[str]] = mapped_column()
 
     # helper func that makes obj print nicely
     def __repr__(self):

@@ -16,6 +16,8 @@ def apply_word_filters(stmt: Select, filters: WordFilter):
 def apply_source_filters(stmt, filters: WordFilter):
     if filters.title:
         stmt = stmt.where(Source.title.ilike(f"%{filters.title}%"))
+    if filters.franchise:
+        stmt = stmt.where(Source.franchise.ilike(f"%{filters.franchise}%"))
     if filters.released_after:
         stmt = stmt.where(Source.release_date >= filters.released_after)
     if filters.released_before:
@@ -38,7 +40,6 @@ def apply_book_filters(stmt, filters: WordFilter):
 def apply_tv_filters(stmt, filters: WordFilter):
     if filters.director or filters.actor or filters.character: 
         stmt = stmt.join(TvShow)
-
         if filters.director:
             stmt = stmt.where(TvShow.director.ilike(f"%{filters.director}%"))
         if filters.actor:

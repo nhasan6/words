@@ -6,7 +6,7 @@ from src.db.models.source import Source, SourceType
 class Book(Source):
     __tablename__ = "books"
     __mapper_args__ = {
-        "polymorphic_identity": SourceType.movie
+        "polymorphic_identity": SourceType.book
     }
     # Database level: foreign key column pointing to sources.id
     id: Mapped[int] = mapped_column(ForeignKey("sources.id"), primary_key=True)

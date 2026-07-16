@@ -5,7 +5,7 @@ from src.db.models.source import SourceType
 class SourceBase(BaseModel):
     title: str
     franchise: str | None = None 
-    type: SourceType
+    type: SourceType | None = None
     genre: list[str] | None = None 
     release_date: date | None = None 
 

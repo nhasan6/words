@@ -27,5 +27,4 @@ def upgrade() -> None:
 def downgrade() -> None:
     """Downgrade schema."""
     op.alter_column('sources', 'release_date', nullable=False)
-    pass
     # ### end Alembic commands ###

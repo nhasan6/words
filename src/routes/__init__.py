@@ -11,5 +11,3 @@ def include_routers(app: FastAPI):
     app.include_router(word_router)
     app.include_router(source_router)
     app.include_router(graph_router)
-
-

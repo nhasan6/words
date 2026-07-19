@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from src.db.connection import init_db
 from contextlib import asynccontextmanager
 from src.routes import include_routers
@@ -15,7 +16,8 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 include_routers(app)
+app.mount("/static", StaticFiles(directory="static", html=True), name="static")
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
+# @app.get("/")
+# async def root():
+#     return {"message": "Hello World"}

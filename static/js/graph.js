@@ -1,5 +1,3 @@
-import ForceGraph3D from '3d-force-graph';
-
 async function loadGraph() {
                 const response = await fetch('/graph');
                 const gData = await response.json();

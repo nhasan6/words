@@ -4,7 +4,7 @@ description to be added
 
 ## Tech Stack
 
- **Backend:** FastAPI 
+- **Backend:** FastAPI 
 - **Database:** PostgreSQL 
 - **ORM:** SQLAlchemy
 - **Migrations:** Alembic

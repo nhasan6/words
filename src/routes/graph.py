@@ -12,7 +12,7 @@ router = APIRouter(prefix="/graph")
 async def get_graph(db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Word).options(selectinload(Word.source)))
     words = result.scalars().all()
-    nodes = [{"id": w.id, "text": w.text, "type": w.type} for w in words]
+    nodes = [{"id": w.id, "text": w.text, "type": w.type, "definition": w.definition} for w in words]
     links = []
 
     for i in range(len(words)):

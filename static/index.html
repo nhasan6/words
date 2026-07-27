@@ -3,9 +3,24 @@
     <head>
         <style> body { margin: 0; } </style>
         <script src="//cdn.jsdelivr.net/npm/3d-force-graph"></script>
+        <title>Glossary or Threads</title>
+        <link rel="stylesheet" href="./css/styles.css">
     </head>
     <body>
         <div id="3d-graph"></div>
-        <script src="js/graph.js"></script>
+        <div id="details-panel" class="hidden">
+            <button id="panel-close">&times;</button>
+            <h2 id="panel-text"></h2>
+
+            <div class="field">
+                <span class="field-label">Type</span>
+                <p id="panel-type"></p>
+            </div>
+            <div class="field">
+                <span class="field-label">Definition</span>
+                <p id="panel-definition"></p>
+            </div>
+        </div>
+        <script src="./js/graph.js"></script>
     </body>
 </html>

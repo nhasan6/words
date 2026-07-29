@@ -7,10 +7,13 @@ from src.db.connection import get_db
 from sqlalchemy import select
 
 from src.db.models.source import Source
+from src.db.models.word_embedding import WordEmbedding
 from src.filters.filters import apply_filters
 from src.schemas.filter import WordFilter
 from src.schemas.word import WordCreate, WordResponse, WordUpdate
 from src.db.models.word import Word
+
+from src.ml.embeddings import encode_word, _MODEL_NAME
 
 router = APIRouter(prefix="/words")
 
@@ -59,6 +62,11 @@ async def add_word(word: WordCreate, db: AsyncSession = Depends(get_db), _curren
         await db.commit()
         await db.refresh(new_word)
 
+        # compute word embedding
+        embedding = encode_word(new_word.text, new_word.definition)
+        db.add(WordEmbedding(word_id=new_word.id, model=_MODEL_NAME, embedding=embedding))
+        await db.commit()
+
         if word.source_id:
             # loads the src relationship
             result = await db.execute(select(Word).options(selectinload(Word.source)).where(Word.id == new_word.id))
@@ -94,6 +102,8 @@ async def update_word(id: int, word: WordUpdate, db: AsyncSession = Depends(get_
                 detail="Source not found"  # source doesn't exist (needs to be created first)
             )
 
+    re_compute_embedding = "text" in update_data or "definition" in update_data
+
     try: 
 
         for key, value in update_data.items():
@@ -101,6 +111,12 @@ async def update_word(id: int, word: WordUpdate, db: AsyncSession = Depends(get_
 
         await db.commit()
         await db.refresh(db_word)
+
+        
+        if re_compute_embedding:
+            embedding = encode_word(db_word.text, db_word.definition)
+            await db.merge(WordEmbedding(word_id=db_word.id, model=_MODEL_NAME, embedding=embedding))
+            await db.commit()
         
         # loads the src relationship
         result = await db.execute(select(Word).options(selectinload(Word.source)).where(Word.id == db_word.id))

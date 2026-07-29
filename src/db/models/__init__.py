@@ -5,3 +5,4 @@ from src.db.models.source import Source
 from src.db.models.book import Book
 from src.db.models.movie import Movie
 from src.db.models.tv_show import TvShow
+from src.db.models.word_embedding import WordEmbedding

@@ -24,7 +24,7 @@ class Source(Base):
     franchise: Mapped[Optional[str]] = mapped_column()
     type: Mapped[SourceType] = mapped_column(SAEnum(SourceType)) # want to limit to enums
     genre: Mapped[Optional[List[str]]] = mapped_column(ARRAY(String))
-    release_date: Mapped[Optional[date]] = mapped_column(nullable=False)
+    release_date: Mapped[Optional[date]] = mapped_column(nullable=True)
 
     # helper func that makes obj print nicely
     def __repr__(self):

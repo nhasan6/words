@@ -6,6 +6,8 @@ description to be added
 
 - **Backend:** FastAPI 
 - **Database:** PostgreSQL 
+- **Embeddings:** sentence-transformers (`all-MiniLM-L6-v2`)
+- **Vector storage:** pgvector (Postgres extension)
 - **ORM:** SQLAlchemy
 - **Migrations:** Alembic
 - **Auth:** JWT (pyjwt) + pwdlib (argon2 hashing)

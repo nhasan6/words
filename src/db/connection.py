@@ -1,3 +1,5 @@
+from urllib.parse import quote_plus
+
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from src.config import Settings
 from sqlalchemy import text
@@ -6,8 +8,12 @@ from src.db.models import Base, User
 settings = Settings()
 
 # build connection string from .env variables
-# @db refers to Docker container name 
-DB_URL = f"postgresql+asyncpg://{settings.POSTGRES_USER}:{settings.POSTGRES_PASSWORD}@db/{settings.POSTGRES_DB}"
+# use localhost for local runs and db inside Docker Compose
+password = quote_plus(settings.POSTGRES_PASSWORD)
+DB_URL = (
+    f"postgresql+asyncpg://{settings.POSTGRES_USER}:{password}"
+    f"@{settings.POSTGRES_HOST}:{settings.POSTGRES_PORT}/{settings.POSTGRES_DB}"
+)
 
 # creates the connection to Postgres using asyncpg
 # echo = True --> makes SQLAlchemy print every SQL cmd it runs to the console

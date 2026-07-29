@@ -8,6 +8,8 @@ services:
       - "8000:8000"
     depends_on:
       - db
+    environment:
+      POSTGRES_HOST: db
     develop:
       watch:
         # syncs local file changes into the container automatically
@@ -27,7 +29,7 @@ services:
 
   # container called db
   db:
-    image: postgres:18
+    image: pgvector/pgvector:pg18
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}

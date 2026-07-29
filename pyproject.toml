@@ -12,6 +12,8 @@ dependencies = [
     "pwdlib[argon2]>=0.2.0",
     "pyjwt>=2.0",
     "python-dotenv>=1.0",
+    "sentence-transformers",
+    "pgvector"
 ]
 
 [tool.alembic]

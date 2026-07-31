@@ -36,6 +36,8 @@ async def get_graph(db: AsyncSession = Depends(get_db)):
                     metadata_score += 3
                 elif words[i].source.title.lower() == words[j].source.title.lower():
                     metadata_score += 3
+                elif words[i].source.franchise and words[j].source.franchise and words[i].source.franchise.lower == words[j].source.franchise.lower():
+                    metadata_score += 3
             if words[i].speaker is not None and words[j].speaker is not None:
                 s1 = words[i].speaker.lower()
                 s2 = words[j].speaker.lower() 

@@ -6,6 +6,8 @@ When I read books on my iPhone and stumble across unfamiliar words, the ambitiou
 
 I designed "Connections" in hopes of addressing this issue and freeing up my phone storage. Connections visualizes each word as a 3D node on a fully interactive graph, and uses ML to highlight the semantic links between different terms. I've also kept metadata-based links, so I can trace back to the book, show, or podcast where I first discovered each word. 
 
+## Images (Coming Soon!) 
+
 ## Tech Stack
 
 - **Backend:** FastAPI 
